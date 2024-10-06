@@ -39,6 +39,7 @@ def enter_narrative(driver: Chrome, text: str) -> None:
     narrative_textarea.click()
     narrative_textarea.clear()
     narrative_textarea.send_keys(text)
+    # un-focus the element
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
@@ -128,7 +129,9 @@ def set_datetime(driver: Chrome, year: int, month: int, day: int,
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_location(driver: Chrome, obl: str, rai:str, hrom:str, settl="N/A settlement") -> None:
+def set_location(
+        driver: Chrome, obl: str, rai:str, hrom:str, settl="N/A settlement"
+    ) -> None:
     """function for filling location field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.location_area_selector)
     driver.execute_script(
@@ -291,7 +294,7 @@ def set_source(driver: Chrome, src="INSO") -> None:
 
 
 def submit_data(driver: Chrome) -> None:
-    """"""
+    """push the 'submit' button"""
     submit_btn = WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, el.submit_button_selector)
