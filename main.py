@@ -45,41 +45,16 @@ driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='logs.txt', encoding='utf-8', level=logging.DEBUG)
-# try:
-    # logger.info(f"{datetime.now()} Started")
-    # file_path = 'incidents.xlsx'  # file with incidents data
-    # df = pd.read_excel(file_path)
-    # driver.get(url)
-    # fn.login(driver)
-    # for i, r in df.iterrows():
-        # logger.info(f"Incident {i+1} writing...")
-        # write_incident(driver, r)
-        # logger.info(f"ADDED {i+1}")
-    # logger.info(f"{datetime.now()} Finished\n\n")
-# except Exception as e:
-    # logger.exception(f"Error during execution: {e}")
-    # print(f"Error during execution: {e}")
-# finally:
-    # driver.quit()
-
-test_data = {
-    "Narrative": "SOME TEST TEXT",
-    "Date": datetime(2024, 10, 6),
-    "Oblast": "Sumska",
-    "Raion": "Sumskyi",
-    "Hromada": "Sumska",
-    "Settlement": "Bytytsia",
-    "Location type": "Farmland",
-    "Actor 1": "Russian Army",
-    "Actor 2": "Ukrainian Army",
-    "Act": "Short Range Attack"
-}
-
 try:
     logger.info(f"{datetime.now()} Started")
+    file_path = 'incidents.xlsx'  # file with incidents data
+    df = pd.read_excel(file_path)
     driver.get(url)
     fn.login(driver)
-    write_incident(driver, test_data)
+    for i, r in df.iterrows():
+        logger.info(f"Incident {i+1} writing...")
+        write_incident(driver, r)
+        logger.info(f"ADDED {i+1}")
     logger.info(f"{datetime.now()} Finished\n\n")
 except Exception as e:
     logger.exception(f"Error during execution: {e}")
