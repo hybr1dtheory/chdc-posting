@@ -1,6 +1,0 @@
-chdcvenv/
-__pycache__/
-*.pyc
-incidents.xlsx
-logs.txt
-config.py
