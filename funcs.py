@@ -199,7 +199,7 @@ def set_perpetrator(driver: Chrome, actor: str) -> None:
         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
         area_to_click
     )
-    wait = WebDriverWait(driver, 3)
+    wait = WebDriverWait(driver, 5)
     wait.until(
         EC.element_to_be_clickable(area_to_click)
     )
@@ -227,7 +227,7 @@ def set_target(driver: Chrome, actor: str) -> None:
         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
         area_to_click
     )
-    wait = WebDriverWait(driver, 3)
+    wait = WebDriverWait(driver, 5)
     wait.until(
         EC.element_to_be_clickable(area_to_click)
     )
@@ -246,14 +246,14 @@ def set_target(driver: Chrome, actor: str) -> None:
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
-def set_act(driver: Chrome, act: str) -> None:
-    """function for filling act field"""
+def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
+    """function for filling an act field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.act_area_selector)
     driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
         area_to_click
     )
-    wait = WebDriverWait(driver, 3)
+    wait = WebDriverWait(driver, 5)
     wait.until(
         EC.element_to_be_clickable(area_to_click)
     )
