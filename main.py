@@ -44,7 +44,7 @@ driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
 })
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='logs.txt', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='logs.txt', encoding='utf-8', level=logging.INFO)
 try:
     logger.info(f"{datetime.now()} Started")
     file_path = 'incidents.xlsx'  # file with incidents data
