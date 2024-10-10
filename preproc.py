@@ -19,7 +19,7 @@ LOWDICT = {
     "к": "k", "л": "l", "м": "m", "н": "n", "о": "o",
     "п": "p", "р": "r", "с": "s", "т": "t", "у": "u",
     "ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh",
-    "щ": "shch", "ь": "", "ю": "iu", "я": "ia",
+    "щ": "shch", "ь": "", "ю": "iu", "я": "ia", "’": ""
 }
 
 EXCEPTDICT = {"Зг": "Zgh", "зг": "zgh"}
@@ -68,55 +68,59 @@ def parse_act(narrative: str) -> str:
     return ""
 
 
-def process_raw_data(
-    raw_df: pd.DataFrame, obl_tr: dict | None = None,
+def process_incident(
+    inc: pd.Series, obl_tr: dict | None = None,
     rai_tr: dict | None = None, hrom_tr: dict | None = None
-) -> pd.DataFrame:
-    data = []
-    for i, r in raw_df.iterrows():
-        text = r["Narrative"]
-        actor1 = parse_actor(text)
-        act = parse_act(text)
-        if obl_tr:
-            oblast = obl_tr.get(r["Oblast"].replace(" область", ""), "")
-        else:
-            oblast = r["Oblast"].replace(" область", "")
-        if rai_tr:
-            raion = rai_tr.get(r["Raion"].replace(" район", ""), "")
-        else:
-            raion = r["Raion"].replace(" район", "")
-        if hrom_tr:
-            hromada = hrom_tr.get(r["Hromada"].replace(" громада", ""), "")
-        else:
-            hromada = r["Hromada"].replace(" громада", "")
-        settl = transliterate(r["Settlement"])
-        incident = {
-            "Date": r["Date"],
-            "Time": None,
-            "Oblast": oblast,
-            "Raion": raion,
-            "Hromada": hromada,
-            "Settlement": settl,
-            "Narrative": text,
-            "Location type": "International Border",
-            "Actor 1": actor1,
-            "Actor 2": "Ukrainian Army",
-            "Act": act
-        }
-        data.append(incident)
+) -> dict:
+    """Function to process and transform raw incident data.
+    inc - pandas.Series or dict-like object with the incident data.
+    obl_tr, rai_tr, hrom_tr - dicts with transliteration ukr -> eng.
+    Returns a dict with data prepared for uploading."""
+    text = inc["Narrative"]
+    actor1 = parse_actor(text)
+    act = parse_act(text)
+    if obl_tr:
+        oblast = obl_tr.get(inc["Oblast"].replace(" область", ""), "")
+    else:
+        oblast = inc["Oblast"].replace(" область", "")
+    if rai_tr:
+        raion = rai_tr.get(inc["Raion"].replace(" район", ""), "")
+    else:
+        raion = inc["Raion"].replace(" район", "")
+    if hrom_tr:
+        hromada = hrom_tr.get(inc["Hromada"].replace(" громада", ""), "")
+    else:
+        hromada = inc["Hromada"].replace(" громада", "")
+    settl = transliterate(inc["Settlement"])
+    incident = {
+        "Date": inc["Date"], "Time": inc.get("Time", None),
+        "Oblast": oblast, "Raion": raion, "Hromada": hromada,
+        "Settlement": settl, "Narrative": text,
+        "Location type": "International Border", "Actor 1": actor1,
+        "Actor 2": "Ukrainian Army", "Act": act
+    }
+    return incident
 
+
+def process_raw_data(data_path: str, db_path: str) -> pd.DataFrame:
+    """Function reads data from xls file at <data_path>,
+    process and transform it row-by-row.
+    Returns pandas.DataFrame object with processed data."""
+    raw_df = pd.read_excel(data_path)
+    dbman = DBManager(db_path)
+    obl_trans = dbman.get_translit_dict("oblast")
+    rai_trans = dbman.get_translit_dict("raion")
+    hrom_trans = dbman.get_translit_dict("hromada")
+    data = []
+    for i, row in raw_df.iterrows():
+        incident = process_incident(
+            row, obl_trans, rai_trans, hrom_trans
+        )
+        data.append(incident)
     return pd.DataFrame(data)
 
 
-raw_df = pd.read_excel("raw_data.xlsx")
-# obl_trans: dict
-# rai_trans: dict
-# hrom_trans: dict
-dbman = DBManager("regions.db")
-obl_trans = dbman.get_translit_dict("oblast")
-rai_trans = dbman.get_translit_dict("raion")
-hrom_trans = dbman.get_translit_dict("hromada")
-
-res = process_raw_data(raw_df, obl_trans, rai_trans, hrom_trans)
-res.to_excel("test.xlsx", sheet_name="Sheet1")
+if __name__ == "__main__":
+    res = process_raw_data("raw_data.xlsx", "regions.db")
+    res.to_excel("test.xlsx", sheet_name="Sheet1")
     
