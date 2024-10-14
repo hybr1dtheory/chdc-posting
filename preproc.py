@@ -97,7 +97,7 @@ def process_incident(
         "Oblast": oblast, "Raion": raion, "Hromada": hromada,
         "Settlement": settl, "Narrative": text,
         "Location type": "International Border", "Actor 1": actor1,
-        "Actor 2": "Ukrainian Army", "Act": act
+        "Actor 2": "Ukrainian Army", "Act": act, "WARNINGS": "",
     }
     return incident
 
@@ -108,6 +108,7 @@ def process_raw_data(data_path: str, db_path: str) -> pd.DataFrame:
     Returns pandas.DataFrame object with processed data."""
     raw_df = pd.read_excel(data_path)
     dbman = DBManager(db_path)
+    valid_set = dbman.get_locations_set()
     obl_trans = dbman.get_translit_dict("oblast")
     rai_trans = dbman.get_translit_dict("raion")
     hrom_trans = dbman.get_translit_dict("hromada")
@@ -116,6 +117,14 @@ def process_raw_data(data_path: str, db_path: str) -> pd.DataFrame:
         incident = process_incident(
             row, obl_trans, rai_trans, hrom_trans
         )
+        loc_row = (
+            row["Oblast"].replace(" область", ""),
+            row["Raion"].replace(" район", ""),
+            row["Hromada"].replace(" громада", ""),
+            row["Settlement"]
+        )
+        if loc_row not in valid_set:
+            incident["WARNINGS"] = "Location error"
         data.append(incident)
     return pd.DataFrame(data)
 
