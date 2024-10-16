@@ -24,8 +24,8 @@ def write_incident(driver: fn.Chrome, row) -> None:
     fn.set_perpetrator(driver, row["Actor 1"])
     fn.set_target(driver, row["Actor 2"])
     fn.set_act(driver, row["Act"])
-    fn.set_source(driver)
     fn.submit_data(driver)
+    driver.refresh()
 
 
 # define and configurate the webdriver
@@ -50,7 +50,6 @@ try:
     file_path = 'incidents.xlsx'  # file with incidents data
     df = pd.read_excel(file_path)
     driver.get(url)
-    fn.login(driver)
     for i, r in df.iterrows():
         logger.info(f"Incident {i+1} writing...")
         write_incident(driver, r)

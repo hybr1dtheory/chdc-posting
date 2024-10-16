@@ -16,7 +16,19 @@ def login(driver: Chrome) -> None:
 
 def start_input(driver: Chrome) -> None:
     """Function to start adding new incedent"""
-    WebDriverWait(driver, 15).until(
+    wait = WebDriverWait(driver, 10)
+    wait.until(
+        EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, el.add_btn_selector)
+        )
+    )
+    # wait for invisibility of the loading animation screen
+    wait.until(
+        EC.invisibility_of_element_located(
+            (By.CSS_SELECTOR, el.splash_screen_selector)
+        )
+    )
+    wait.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, el.add_btn_selector))
     ).click()
 
@@ -269,7 +281,16 @@ def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
             (By.CSS_SELECTOR, el.act_path_selector)
         )
     )
+    if is_attempted:
+        set_act_attempted(driver)
     driver.execute_script("arguments[0].blur();", area_to_click)
+
+
+def set_act_attempted(driver: Chrome) -> None:
+    """function to click on the 'attempted' checkbox"""
+    WebDriverWait(driver, 3).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, el.act_attempted_selector))
+    ).click()
 
 
 def set_source(driver: Chrome, src="INSO") -> None:
