@@ -1,4 +1,5 @@
 """Selectors for searching html elements"""
+staff_btn_selector = "a.staff-btn"
 add_btn_selector = 'button.chdc-button__small.mdc-button--unelevated'
 narrative_area_selector = 'header.datasheet-head app-text-field-editor-cell > div.cell-wrapped.editable'
 narrative_input_selector = 'textarea[placeholder="Enter Narrative"]'
