@@ -50,6 +50,7 @@ try:
     file_path = 'incidents.xlsx'  # file with incidents data
     df = pd.read_excel(file_path)
     driver.get(url)
+    fn.login(driver)
     for i, r in df.iterrows():
         logger.info(f"Incident {i+1} writing...")
         write_incident(driver, r)

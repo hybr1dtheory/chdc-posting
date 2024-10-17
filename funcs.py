@@ -10,7 +10,9 @@ import elements as el
 def login(driver: Chrome) -> None:
     """Function for authentication to CHDC"""
     WebDriverWait(driver, 15).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "a.staff_btn"))
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.staff_btn_selector)
+        )
     ).click()
 
 
