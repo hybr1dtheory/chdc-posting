@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.options import Options
 import logging
 import pandas as pd
 import funcs as fn
-from config import profile_path, profile_name, url
+from config import profile_path, profile_name, target_url
 from datetime import datetime
 
 
@@ -49,7 +49,7 @@ try:
     logger.info(f"{datetime.now()} Started")
     file_path = 'incidents.xlsx'  # file with incidents data
     df = pd.read_excel(file_path)
-    driver.get(url)
+    driver.get(target_url)
     fn.login(driver)
     for i, r in df.iterrows():
         logger.info(f"Incident {i+1} writing...")

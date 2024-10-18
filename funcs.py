@@ -1,3 +1,5 @@
+"""Module with all functionality to iteract with webpage 
+with different types of fields and to enter data into it."""
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -5,6 +7,43 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import elements as el
+import config as cfg
+
+
+def complete_mfa(driver: Chrome) -> None:
+    """Function to go through multifactor auth"""
+    email = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, el.email_field_selector)
+        )
+    )
+    email.click()
+    email.clear()
+    email.send_keys(cfg.user_email)
+    submit_btn = driver.find_element(By.CSS_SELECTOR, el.next_btn_selector)
+    submit_btn.click()
+    pswd = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, el.pass_field_selector)
+        )
+    )
+    pswd.click()
+    pswd.clear()
+    pswd.send_keys(cfg.user_pass)
+    submit_btn = driver.find_element(By.CSS_SELECTOR, el.next_btn_selector)
+    submit_btn.click()
+    # waiting to enter code in auth app by hand
+    WebDriverWait(driver, 30).until(
+        EC.url_to_be(cfg.mfa_complete_url)
+    )
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.next_btn_selector)
+        )
+    ).click()
+    WebDriverWait(driver, 15).until(
+        EC.title_is(el.chdc_title_text)
+    )
 
 
 def login(driver: Chrome) -> None:
@@ -14,6 +53,16 @@ def login(driver: Chrome) -> None:
             (By.CSS_SELECTOR, el.staff_btn_selector)
         )
     ).click()
+    # check if MFA needed by url
+    WebDriverWait(driver, 15).until(
+        EC.url_changes(cfg.target_url)
+    )
+    if EC.url_contains(cfg.mfa_url):
+        complete_mfa(driver)
+    elif EC.url_to_be(cfg.chdc_db_url):
+        return
+    else:
+        raise ValueError(f"Unknown page: {driver.current_url}")
 
 
 def start_input(driver: Chrome) -> None:
