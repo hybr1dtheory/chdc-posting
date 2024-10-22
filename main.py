@@ -12,9 +12,16 @@ def write_incident(driver: fn.Chrome, row) -> None:
     """This function step by step calls all functions to add incident"""
     fn.start_input(driver)
     fn.enter_narrative(driver, row["Narrative"])
+    if pd.isna(row["Time"]):
+        has_time = False
+        hh, mm = 0, 0
+    else:
+        t = row["Time"]
+        hh, mm = t.hour, t.minute
+        has_time = True
     fn.set_datetime(
         driver, row["Date"].year, row["Date"].month,
-        row["Date"].day, write_time=False
+        row["Date"].day, hour=hh, minute=mm, write_time=has_time
     )
     fn.set_location(
         driver, obl=row["Oblast"], rai=row["Raion"],
@@ -23,7 +30,8 @@ def write_incident(driver: fn.Chrome, row) -> None:
     fn.set_location_type(driver, row["Location type"])
     fn.set_perpetrator(driver, row["Actor 1"])
     fn.set_target(driver, row["Actor 2"])
-    fn.set_act(driver, row["Act"])
+    attempt = not pd.isna(row["Attempted"])
+    fn.set_act(driver, row["Act"], is_attempted=attempt)
     fn.submit_data(driver)
     driver.refresh()
 

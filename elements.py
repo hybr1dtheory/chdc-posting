@@ -14,7 +14,7 @@ actor2_path_selector = 'div.datasheet-body.p-4.ng-star-inserted > div:nth-child(
 act_area_selector = 'div.datasheet-body.p-4.ng-star-inserted > div:nth-child(9) div.cell-wrapped.editable'
 act_input_selector = 'input.mat-mdc-input-element[placeholder="Search Act"]'
 act_path_selector = 'div.datasheet-body.p-4.ng-star-inserted > div:nth-child(9) div.cell-options > div.path-preview'
-act_attempted_selector = 'input[type="radio" & value="act-result:attempted"]'
+act_attempted_selector = 'input[value="act-result:attempted"]'
 source_area_selector = 'div.datasheet-body.p-4.ng-star-inserted > div:nth-child(19) div.cell-wrapped.editable'
 source_input_selector = 'input.mat-mdc-input-element[placeholder="Search Source"]'
 location_area_selector = 'div.datasheet-body.p-4.ng-star-inserted > div:nth-child(2) div.cell-wrapped.editable'
@@ -38,4 +38,6 @@ pass_field_selector = 'input.form-control[type="password"]'
 login_title_text = "Вхід в обліковий запис"
 chdc_title_text = "INSO CHDC"
 next_btn_selector = 'input.win-button[type="submit"]'
-
+modal_window_selector = 'mat-dialog-container[aria-modal="true"]'
+modal_close_btn_selector = 'chdc-info-dialog > div > header > button.mat-icon-button'
+radio_group_selector = 'div.editable.valid > div.radio-options > mat-radio-group'

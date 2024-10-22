@@ -54,13 +54,14 @@ def login(driver: Chrome) -> None:
         )
     ).click()
     # check if MFA needed by url
-    WebDriverWait(driver, 15).until(
+    WebDriverWait(driver, 10).until(
         EC.url_changes(cfg.target_url)
     )
-    if EC.url_contains(cfg.mfa_url):
-        complete_mfa(driver)
-    elif EC.url_to_be(cfg.chdc_db_url):
+    time.sleep(5)
+    if EC.url_contains(cfg.chdc_db_url):
         return
+    elif EC.url_contains(cfg.mfa_url):
+        complete_mfa(driver)
     else:
         raise ValueError(f"Unknown page: {driver.current_url}")
 
@@ -275,11 +276,12 @@ def set_perpetrator(driver: Chrome, actor: str) -> None:
     actor_field.click()
     actor_field.clear()
     actor_field.send_keys(actor)
-    wait.until(
-        EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, el.actor1_path_selector)
+    if actor != "Unknown Actor":
+        wait.until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, el.actor1_path_selector)
+            )
         )
-    )
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
@@ -339,9 +341,13 @@ def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
 
 def set_act_attempted(driver: Chrome) -> None:
     """function to click on the 'attempted' checkbox"""
-    WebDriverWait(driver, 3).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, el.act_attempted_selector))
-    ).click()
+    WebDriverWait(driver, 5).until(
+        EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, el.radio_group_selector)
+        )
+    )
+    elem = driver.find_element(By.CSS_SELECTOR, el.act_attempted_selector)
+    elem.click()
 
 
 def set_source(driver: Chrome, src="INSO") -> None:

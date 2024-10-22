@@ -132,4 +132,3 @@ def process_raw_data(data_path: str, db_path: str) -> pd.DataFrame:
 if __name__ == "__main__":
     res = process_raw_data("raw_data.xlsx", "regions.db")
     res.to_excel("test.xlsx", sheet_name="Sheet1")
-    
