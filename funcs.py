@@ -371,11 +371,18 @@ def set_source(driver: Chrome, src="INSO") -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def submit_data(driver: Chrome) -> None:
-    """push the 'submit' button"""
-    submit_btn = WebDriverWait(driver, 5).until(
+def submit_data(driver: Chrome) -> str:
+    """push the 'submit' button to send data
+    and reurns an incident id in database (str)"""
+    id_span = WebDriverWait(driver, 5).until(
+        EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, el.incident_id_selector)
+        )
+    )
+    incident_id = id_span.text
+    WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, el.submit_button_selector)
         )
-    )
-    submit_btn.click()
+    ).click()
+    return incident_id

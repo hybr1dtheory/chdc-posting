@@ -8,8 +8,9 @@ from config import profile_path, profile_name, target_url
 from datetime import datetime
 
 
-def write_incident(driver: fn.Chrome, row) -> None:
-    """This function step by step calls all functions to add incident"""
+def write_incident(driver: fn.Chrome, row) -> str:
+    """This function step by step calls all functions to add incident
+    and returns incident id (str)"""
     fn.start_input(driver)
     fn.enter_narrative(driver, row["Narrative"])
     if pd.isna(row["Time"]):
@@ -32,8 +33,9 @@ def write_incident(driver: fn.Chrome, row) -> None:
     fn.set_target(driver, row["Actor 2"])
     attempt = not pd.isna(row["Attempted"])
     fn.set_act(driver, row["Act"], is_attempted=attempt)
-    fn.submit_data(driver)
+    inc_id = fn.submit_data(driver)
     driver.refresh()
+    return inc_id
 
 
 # define and configurate the webdriver
@@ -54,16 +56,16 @@ driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='logs.txt', encoding='utf-8', level=logging.INFO)
 try:
-    logger.info(f"{datetime.now()} Started")
+    logger.info(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} Started")
     file_path = 'incidents.xlsx'  # file with incidents data
     df = pd.read_excel(file_path)
     driver.get(target_url)
     fn.login(driver)
     for i, r in df.iterrows():
-        logger.info(f"Incident {i+1} writing...")
-        write_incident(driver, r)
-        logger.info(f"ADDED {i+1}")
-    logger.info(f"{datetime.now()} Finished\n\n")
+        logger.info(f" Incident {i+1} writing...")
+        inc_id = write_incident(driver, r)
+        logger.info(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} - ADDED {i+1} with id {inc_id}")
+    logger.info(f"{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} Finished\n\n")
 except Exception as e:
     logger.exception(f"Error during execution: {e}")
     print(f"Error during execution: {e}")

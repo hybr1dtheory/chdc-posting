@@ -32,12 +32,11 @@ apply_date_xpath = '//button[@ngxmatdatepickerapply]'
 submit_button_selector = 'button[data-testid="submit-button"]'
 simple_li_selector = 'li[title="{title}"]'
 splash_screen_selector = 'chdc-splash-screen.ng-star-inserted'
-page_title_selector = 'head > title'
 email_field_selector = 'input.form-control[placeholder="Enter your INSO email address"]'
 pass_field_selector = 'input.form-control[type="password"]'
-login_title_text = "Вхід в обліковий запис"
 chdc_title_text = "INSO CHDC"
 next_btn_selector = 'input.win-button[type="submit"]'
 modal_window_selector = 'mat-dialog-container[aria-modal="true"]'
 modal_close_btn_selector = 'chdc-info-dialog > div > header > button.mat-icon-button'
 radio_group_selector = 'div.editable.valid > div.radio-options > mat-radio-group'
+incident_id_selector = 'div.incident-overview-title > span.px-1.cursor-pointer.chdc-status-incomplete-color'
