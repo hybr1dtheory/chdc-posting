@@ -15,14 +15,14 @@ def write_incident(driver: fn.Chrome, row) -> str:
     fn.enter_narrative(driver, row["Narrative"])
     if pd.isna(row["Time"]):
         has_time = False
-        hh, mm = 0, 0
+        hh = 0
     else:
         t = row["Time"]
-        hh, mm = t.hour, t.minute
+        hh = t.hour
         has_time = True
     fn.set_datetime(
         driver, row["Date"].year, row["Date"].month,
-        row["Date"].day, hour=hh, minute=mm, write_time=has_time
+        row["Date"].day, hour=hh, write_time=has_time
     )
     fn.set_location(
         driver, obl=row["Oblast"], rai=row["Raion"],

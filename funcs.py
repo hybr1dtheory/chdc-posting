@@ -3,7 +3,7 @@ with different types of fields and to enter data into it."""
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import elements as el
@@ -107,8 +107,10 @@ def enter_narrative(driver: Chrome, text: str) -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_datetime(driver: Chrome, year: int, month: int, day: int,
-                hour=0, minute=0, write_time=True) -> None:
+def set_datetime(
+        driver: Chrome, year: int, month: int,
+        day: int, hour=0, write_time=True
+    ) -> None:
     """function for selecting the date and time from calendar"""
     # dict for convert month number to month name
     month_name = {
@@ -161,32 +163,20 @@ def set_datetime(driver: Chrome, year: int, month: int, day: int,
             el.day_button_selector.format(month=month_name[month], day=day, year=year))
         )
     ).click()
-    # select hours and minutes or press 'remove time'
-    if not write_time:
-        wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, el.remove_time_button_xpath)
-            )
-        ).click()
-    else:
+    # select hours if needed
+    if write_time:
         hour_field = wait.until(
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, el.hour_field_selector)
             )
         )
-        hour_field.clear()
-        hour_field.send_keys(str(hour))
-        minute_field = wait.until(
-            EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, el.minute_field_selector)
-            )
-        )
-        minute_field.clear()
-        minute_field.send_keys(str(minute))
+        select_time = Select(hour_field)
+        select_time.select_by_value(str(hour))
+        
     # Press "Apply" button
     apply_button = wait.until(
         EC.element_to_be_clickable(
-            (By.XPATH, el.apply_date_xpath)
+            (By.CSS_SELECTOR, el.apply_date_selector)
         )
     )
     apply_button.click()
