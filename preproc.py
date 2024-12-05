@@ -65,6 +65,10 @@ def parse_act(narrative: str) -> str:
         return "Rockets & Missiles"
     elif "round" in narrative:
         return "Artillery"
+    elif "tank cannon" in narrative:
+        return "Fighting Vehicle"
+    elif "helicopter" in narrative:
+        return "Helicopter"
     return ""
 
 
