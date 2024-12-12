@@ -186,7 +186,7 @@ def set_datetime(
 def set_location(
         driver: Chrome, obl: str, rai:str, hrom:str, settl="N/A settlement"
     ) -> None:
-    """function for filling location field"""
+    """function for filling the location field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.location_area_selector)
     driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
@@ -231,7 +231,7 @@ def set_location(
 
 
 def set_location_type(driver: Chrome, loctype: str) -> None:
-    """function for filling location type field"""
+    """function for filling the location type field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.loctype_area_selector)
     driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
@@ -243,6 +243,34 @@ def set_location_type(driver: Chrome, loctype: str) -> None:
             (By.CSS_SELECTOR, el.simple_li_selector.format(title=loctype))
         )
     ).click()
+    driver.execute_script("arguments[0].blur();", area_to_click)
+
+
+def set_coordinates(driver: Chrome, lat: float, lon: float) -> None:
+    """function for filling coordinates"""
+    area_to_click = driver.find_element(By.CSS_SELECTOR, el.latlon_area_selector)
+    driver.execute_script(
+        "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
+        area_to_click
+    )
+    area_to_click.click()
+    wait = WebDriverWait(driver, 3)
+    lat_field = wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.lat_input_selector)
+        )
+    )
+    lat_field.click()
+    lat_field.clear()
+    lat_field.send_keys(str(lat))
+    lon_field = wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.lon_input_selector)
+        )
+    )
+    lon_field.click()
+    lon_field.clear()
+    lon_field.send_keys(str(lon))
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 

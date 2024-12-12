@@ -29,6 +29,8 @@ def write_incident(driver: fn.Chrome, row) -> str:
         hrom=row["Hromada"], settl=row["Settlement"]
     )
     fn.set_location_type(driver, row["Location type"])
+    if not pd.isna(row["Latitude"]):
+        fn.set_coordinates(driver, lat=row["Latitude"], lon=row["Longitude"])
     fn.set_perpetrator(driver, row["Actor 1"])
     fn.set_target(driver, row["Actor 2"])
     attempt = not pd.isna(row["Attempted"])
