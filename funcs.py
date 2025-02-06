@@ -368,6 +368,62 @@ def set_act_attempted(driver: Chrome) -> None:
     elem.click()
 
 
+def set_prop_impact(
+    driver: Chrome, actor: str, pi_type: str, item: str
+    ) -> None:
+    """function for filling property imapct fields"""
+    area_to_click = driver.find_element(By.CSS_SELECTOR, el.pi_area_selector)
+    driver.execute_script(
+        "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})",
+        area_to_click
+    )
+    wait = WebDriverWait(driver, 5)
+    wait.until(
+        EC.element_to_be_clickable(area_to_click)
+    ).click()
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.pi_btn_selector)
+        )
+    ).click()
+    actor_field = wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.pi_actor_field_selector)
+        )
+    )
+    actor_field.click()
+    # actor_field.clear()
+    actor_field.send_keys(actor)
+    #selecting the impact type from dropdown list
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.pi_type_field_selector)
+        )
+    ).click()
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.simple_li_selector.format(title=pi_type))
+        )
+    ).click()
+    #selecting the impact item from dropdown list
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.pi_item_field_selector)
+        )
+    ).click()
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.simple_li_selector.format(title=item))
+        )
+    ).click()
+    #press 'save' button
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.XPATH, el.pi_save_btn_xpath)
+        )
+    ).click()
+
+
 def set_source(driver: Chrome, src="INSO") -> None:
     """function for filling source field"""
     area_to_click = driver.find_element(

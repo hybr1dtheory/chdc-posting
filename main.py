@@ -35,6 +35,10 @@ def write_incident(driver: fn.Chrome, row) -> str:
     fn.set_target(driver, row["Actor 2"])
     attempt = not pd.isna(row["Attempted"])
     fn.set_act(driver, row["Act"], is_attempted=attempt)
+    if not pd.isna(row["PI Actor"]):
+        fn.set_prop_impact(
+            driver, row["PI Actor"], row["PI Type"], row["PI Item"]
+        )
     inc_id = fn.submit_data(driver)
     driver.refresh()
     return inc_id
