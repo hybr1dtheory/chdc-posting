@@ -53,7 +53,7 @@ def parse_actor(narrative: str) -> str:
 
 
 def parse_act(narrative: str) -> str:
-    if "guided aerial bomb" in narrative:
+    if "guided aerial bomb" in narrative or "airstrike" in narrative:
         return "Airstrike"
     elif "missile" in narrative:
         return "Rockets & Missiles"
@@ -63,6 +63,8 @@ def parse_act(narrative: str) -> str:
         return "Short Range Attack"
     elif "MLRS" in narrative:
         return "Rockets & Missiles"
+	elif "grenade launcher" in narrative:
+		return "Light Weapons"
     elif "round" in narrative:
         return "Artillery"
     elif "tank cannon" in narrative:
