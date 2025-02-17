@@ -386,14 +386,25 @@ def set_prop_impact(
             (By.CSS_SELECTOR, el.pi_btn_selector)
         )
     ).click()
-    actor_field = wait.until(
+    wait.until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, el.pi_actor_field_selector)
         )
-    )
-    actor_field.click()
+    ).click()
+    # actor_field.click()
     # actor_field.clear()
-    actor_field.send_keys(actor)
+    # actor_field.send_keys(actor)
+    for step in el.pi_actors_path[actor]:
+        wait.until(
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, el.simple_li_selector.format(title=step))
+            )
+        ).click()
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, el.simple_li_selector.format(title=actor))
+        )
+    ).click()
     #selecting the impact type from dropdown list
     wait.until(
         EC.element_to_be_clickable(
