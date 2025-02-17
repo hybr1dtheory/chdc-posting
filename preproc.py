@@ -63,8 +63,8 @@ def parse_act(narrative: str) -> str:
         return "Short Range Attack"
     elif "MLRS" in narrative:
         return "Rockets & Missiles"
-	elif "grenade launcher" in narrative:
-		return "Light Weapons"
+    elif "grenade launcher" in narrative:
+        return "Light Weapons"
     elif "round" in narrative:
         return "Artillery"
     elif "tank cannon" in narrative:
@@ -82,7 +82,9 @@ def process_incident(
     inc - pandas.Series or dict-like object with the incident data.
     obl_tr, rai_tr, hrom_tr - dicts with transliteration ukr -> eng.
     Returns a dict with data prepared for uploading."""
-    text = inc["Narrative"]
+    text = inc["Narrative"].strip()
+	while "  " in text:
+		text.replace("  ", " ")
     actor1 = parse_actor(text)
     act = parse_act(text)
     if obl_tr:
