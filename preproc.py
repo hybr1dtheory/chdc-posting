@@ -83,8 +83,8 @@ def process_incident(
     obl_tr, rai_tr, hrom_tr - dicts with transliteration ukr -> eng.
     Returns a dict with data prepared for uploading."""
     text = inc["Narrative"].strip()
-	while "  " in text:
-		text.replace("  ", " ")
+    while "  " in text:
+        text.replace("  ", " ")
     actor1 = parse_actor(text)
     act = parse_act(text)
     if obl_tr:
