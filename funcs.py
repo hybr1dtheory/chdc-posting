@@ -302,11 +302,6 @@ def set_perpetrator(driver: Chrome, actor: str) -> None:
                 (By.CSS_SELECTOR, el.simple_li_selector.format(title=step))
             )
         ).click()
-    # wait.until(
-        # EC.element_to_be_clickable(
-            # (By.CSS_SELECTOR, el.simple_li_selector.format(title=actor))
-        # )
-    # ).click()
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
@@ -352,13 +347,6 @@ def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
         EC.element_to_be_clickable((By.CSS_SELECTOR, el.act_input_selector))
     )
     act_field.click()
-    # act_field.clear()
-    # act_field.send_keys(act)
-    # wait.until(
-        # EC.visibility_of_element_located(
-            # (By.CSS_SELECTOR, el.act_path_selector)
-        # )
-    # )
     for step in el.acts_path[act]:
         wait.until(
             EC.element_to_be_clickable(
