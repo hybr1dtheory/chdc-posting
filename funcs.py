@@ -48,6 +48,9 @@ def complete_mfa(driver: Chrome) -> None:
 
 def login(driver: Chrome) -> None:
     """Function for authentication to CHDC"""
+    time.sleep(5)
+    if EC.url_contains(cfg.chdc_db_url):
+        return
     WebDriverWait(driver, 15).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, el.staff_btn_selector)
@@ -80,6 +83,7 @@ def start_input(driver: Chrome) -> None:
             (By.CSS_SELECTOR, el.splash_screen_selector)
         )
     )
+    time.sleep(1)
     wait.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, el.add_btn_selector))
     ).click()
@@ -292,14 +296,17 @@ def set_perpetrator(driver: Chrome, actor: str) -> None:
         )
     )
     actor_field.click()
-    actor_field.clear()
-    actor_field.send_keys(actor)
-    if actor != "Unknown Actor":
+    for step in el.perpetrators_path[actor]:
         wait.until(
-            EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, el.actor1_path_selector)
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, el.simple_li_selector.format(title=step))
             )
-        )
+        ).click()
+    # wait.until(
+        # EC.element_to_be_clickable(
+            # (By.CSS_SELECTOR, el.simple_li_selector.format(title=actor))
+        # )
+    # ).click()
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
@@ -345,13 +352,19 @@ def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
         EC.element_to_be_clickable((By.CSS_SELECTOR, el.act_input_selector))
     )
     act_field.click()
-    act_field.clear()
-    act_field.send_keys(act)
-    wait.until(
-        EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, el.act_path_selector)
-        )
-    )
+    # act_field.clear()
+    # act_field.send_keys(act)
+    # wait.until(
+        # EC.visibility_of_element_located(
+            # (By.CSS_SELECTOR, el.act_path_selector)
+        # )
+    # )
+    for step in el.acts_path[act]:
+        wait.until(
+            EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, el.simple_li_selector.format(title=step))
+            )
+        ).click()
     if is_attempted:
         set_act_attempted(driver)
     driver.execute_script("arguments[0].blur();", area_to_click)
@@ -391,9 +404,6 @@ def set_prop_impact(
             (By.CSS_SELECTOR, el.pi_actor_field_selector)
         )
     ).click()
-    # actor_field.click()
-    # actor_field.clear()
-    # actor_field.send_keys(actor)
     for step in el.pi_actors_path[actor]:
         wait.until(
             EC.element_to_be_clickable(

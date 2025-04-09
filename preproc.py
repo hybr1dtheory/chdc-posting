@@ -2,6 +2,7 @@ import pandas as pd
 from dbmanage import DBManager
 
 
+# Dcicts for transliteration
 UPDICT = {
     "А": "A", "Б": "B", "В": "V", "Г": "H", "Ґ": "G",
     "Д": "D", "Е": "E", "Є": "Ye", "Ж": "Zh", "З": "Z",
@@ -62,6 +63,8 @@ def parse_act(narrative: str) -> str:
     elif "short-range combat UAV" in narrative:
         return "Short Range Attack"
     elif "MLRS" in narrative:
+        if "mortar" in narrative or "artillery" in narrative:
+            return "Artillery/Other"
         return "Rockets & Missiles"
     elif "grenade launcher" in narrative:
         return "Light Weapons"
