@@ -101,4 +101,7 @@ acts_path = {
     "Helicopter": [
         "Attack", "Platforms", "Helicopter"
     ],
+    "Fighting Vehicle": [
+        "Attack", "Platforms", "Fighting Vehicle"
+    ],
 }
