@@ -48,9 +48,6 @@ def complete_mfa(driver: Chrome) -> None:
 
 def login(driver: Chrome) -> None:
     """Function for authentication to CHDC"""
-    time.sleep(5)
-    if EC.url_contains(cfg.chdc_db_url):
-        return
     WebDriverWait(driver, 15).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, el.staff_btn_selector)
@@ -108,7 +105,7 @@ def enter_narrative(driver: Chrome, text: str) -> None:
     narrative_textarea.clear()
     narrative_textarea.send_keys(text)
     # un-focus the element
-    driver.execute_script("arguments[0].blur();", area_to_click)
+    driver.execute_script("arguments[0].blur();", narrative_textarea)
 
 
 def set_datetime(
