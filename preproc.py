@@ -25,6 +25,20 @@ LOWDICT = {
 
 EXCEPTDICT = {"Зг": "Zgh", "зг": "zgh"}
 
+# Exceptions in settlement names
+SETTL_EXC = {
+    "Chuikivka": "Chuykivka",
+    "Zaliznyi Mist": "Zaliznyy Mist",
+    "Maiske": "Mayske",
+    "Simeikyne": "Simeykyne",
+    "Krasnyi Khutir": "Krasnyy Khutir",
+    "Hai": "Hay",
+    "Veselyi Hai": "Veselyy Hay",
+    "Velykyi Prykil": "Velykyy Prykil",
+    "Mykhailivka": "Mykhaylivka",
+    "Mykhailivske": "Mykhaylivske",
+}
+
 
 def transliterate(name: str) -> str:
     """Function for transliteration of Ukrainian names in accordance with 
@@ -103,6 +117,7 @@ def process_incident(
     else:
         hromada = inc["Hromada"].replace(" громада", "")
     settl = transliterate(inc["Settlement"])
+    settl = SETTL_EXC.get(settl, settl)
     incident = {
         "Date": inc["Date"], "Time": inc.get("Time", None),
         "Oblast": oblast, "Raion": raion, "Hromada": hromada,
