@@ -1,6 +1,6 @@
 """This module is designed to automate data entry into a web form
 with fields of several types (text, datetime, drop-down list)"""
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.options import Options
 import logging
 import pandas as pd
 import funcs as fn
@@ -45,14 +45,14 @@ def write_incident(driver: fn.Chrome, row) -> str:
 
 
 # define and configurate the webdriver
-chrome_options = Options()
-chrome_options.add_argument(fr'user-data-dir={profile_path}')
-chrome_options.add_argument(fr"--profile-directory={profile_name}")
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-chrome_options.add_argument("--start-maximized")  # open driver in maximized window
-chrome_options.add_argument("--kiosk")  # fullscreen mode for the webpage
-chrome_options.add_argument("zoom=0.5")  # set zoom to 50%
-driver = fn.Chrome(options=chrome_options)
+browser_options = Options()
+browser_options.add_argument(fr'user-data-dir={profile_path}')
+browser_options.add_argument(fr"--profile-directory={profile_name}")
+browser_options.add_argument("--disable-blink-features=AutomationControlled")
+browser_options.add_argument("--start-maximized")  # open driver in maximized window
+browser_options.add_argument("--kiosk")  # fullscreen mode for the webpage
+browser_options.add_argument("zoom=0.5")  # set zoom to 50%
+driver = fn.Edge(options=browser_options)
 driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
     'source': '''delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
                 delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;

@@ -1,6 +1,6 @@
 """Module with all functionality to iteract with webpage 
 with different types of fields and to enter data into it."""
-from selenium.webdriver import Chrome
+from selenium.webdriver import Edge
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -10,7 +10,7 @@ import elements as el
 import config as cfg
 
 
-def complete_mfa(driver: Chrome) -> None:
+def complete_mfa(driver: Edge) -> None:
     """Function to go through multifactor auth"""
     email = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(
@@ -46,7 +46,7 @@ def complete_mfa(driver: Chrome) -> None:
     )
 
 
-def login(driver: Chrome) -> None:
+def login(driver: Edge) -> None:
     """Function for authentication to CHDC"""
     WebDriverWait(driver, 15).until(
         EC.element_to_be_clickable(
@@ -66,7 +66,7 @@ def login(driver: Chrome) -> None:
         raise ValueError(f"Unknown page: {driver.current_url}")
 
 
-def start_input(driver: Chrome) -> None:
+def start_input(driver: Edge) -> None:
     """Function to start adding new incedent"""
     wait = WebDriverWait(driver, 10)
     wait.until(
@@ -86,7 +86,7 @@ def start_input(driver: Chrome) -> None:
     ).click()
 
 
-def enter_narrative(driver: Chrome, text: str) -> None:
+def enter_narrative(driver: Edge, text: str) -> None:
     """Function for filling the narrative textarea.
     firstly we must to click on the wrapper to have access to the textarea,
     then find the textarea after activating, click and fill it."""
@@ -109,7 +109,7 @@ def enter_narrative(driver: Chrome, text: str) -> None:
 
 
 def set_datetime(
-        driver: Chrome, year: int, month: int,
+        driver: Edge, year: int, month: int,
         day: int, hour=0, write_time=True
     ) -> None:
     """function for selecting the date and time from calendar"""
@@ -185,7 +185,7 @@ def set_datetime(
 
 
 def set_location(
-        driver: Chrome, obl: str, rai:str, hrom:str, settl="N/A settlement"
+        driver: Edge, obl: str, rai:str, hrom:str, settl="N/A settlement"
     ) -> None:
     """function for filling the location field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.location_area_selector)
@@ -231,7 +231,7 @@ def set_location(
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_location_type(driver: Chrome, loctype: str) -> None:
+def set_location_type(driver: Edge, loctype: str) -> None:
     """function for filling the location type field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.loctype_area_selector)
     driver.execute_script(
@@ -247,7 +247,7 @@ def set_location_type(driver: Chrome, loctype: str) -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_coordinates(driver: Chrome, lat: float, lon: float) -> None:
+def set_coordinates(driver: Edge, lat: float, lon: float) -> None:
     """function for filling coordinates"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.latlon_area_selector)
     driver.execute_script(
@@ -275,7 +275,7 @@ def set_coordinates(driver: Chrome, lat: float, lon: float) -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_perpetrator(driver: Chrome, actor: str) -> None:
+def set_perpetrator(driver: Edge, actor: str) -> None:
     """function for filling actor 1 field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.actor1_area_selector)
     driver.execute_script(
@@ -302,7 +302,7 @@ def set_perpetrator(driver: Chrome, actor: str) -> None:
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
-def set_target(driver: Chrome, actor: str) -> None:
+def set_target(driver: Edge, actor: str) -> None:
     """function for filling actor 2 field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.actor2_area_selector)
     driver.execute_script(
@@ -328,7 +328,7 @@ def set_target(driver: Chrome, actor: str) -> None:
     driver.execute_script("arguments[0].blur();", actor_field)
 
 
-def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
+def set_act(driver: Edge, act: str, is_attempted = False) -> None:
     """function for filling an act field"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.act_area_selector)
     driver.execute_script(
@@ -355,7 +355,7 @@ def set_act(driver: Chrome, act: str, is_attempted = False) -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def set_act_attempted(driver: Chrome) -> None:
+def set_act_attempted(driver: Edge) -> None:
     """function to click on the 'attempted' checkbox"""
     WebDriverWait(driver, 5).until(
         EC.visibility_of_element_located(
@@ -367,7 +367,7 @@ def set_act_attempted(driver: Chrome) -> None:
 
 
 def set_prop_impact(
-    driver: Chrome, actor: str, pi_type: str, item: str
+    driver: Edge, actor: str, pi_type: str, item: str
     ) -> None:
     """function for filling property imapct fields"""
     area_to_click = driver.find_element(By.CSS_SELECTOR, el.pi_area_selector)
@@ -430,7 +430,7 @@ def set_prop_impact(
     ).click()
 
 
-def set_source(driver: Chrome, src="INSO") -> None:
+def set_source(driver: Edge, src="INSO") -> None:
     """function for filling source field"""
     area_to_click = driver.find_element(
         By.CSS_SELECTOR, el.source_area_selector
@@ -451,7 +451,7 @@ def set_source(driver: Chrome, src="INSO") -> None:
     driver.execute_script("arguments[0].blur();", area_to_click)
 
 
-def submit_data(driver: Chrome) -> str:
+def submit_data(driver: Edge) -> str:
     """push the 'submit' button to send data
     and reurns an incident id in database (str)"""
     id_span = WebDriverWait(driver, 5).until(
