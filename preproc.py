@@ -125,6 +125,7 @@ def process_incident(
         "Location type": "International Border", "Actor 1": actor1,
         "Actor 2": "Ukrainian Army", "Act": act, "WARNINGS": "",
     }
+    print("Processed")
     return incident
 
 
@@ -140,6 +141,7 @@ def process_raw_data(data_path: str, db_path: str) -> pd.DataFrame:
     hrom_trans = dbman.get_translit_dict("hromada")
     data = []
     for i, row in raw_df.iterrows():
+        print(f"incident {i} processing...")
         incident = process_incident(
             row, obl_trans, rai_trans, hrom_trans
         )
