@@ -37,6 +37,9 @@ SETTL_EXC = {
     "Velykyi Prykil": "Velykyy Prykil",
     "Mykhailivka": "Mykhaylivka",
     "Mykhailivske": "Mykhaylivske",
+    "Yurieve": "Yuriieve",
+    "Muraveinia": "Muraveynia",
+    "Shyrokyi Bereh": "Shyrokyy Bereh",
 }
 
 
@@ -76,6 +79,8 @@ def parse_act(narrative: str) -> str:
         return "Long Range Attack"
     elif "short-range combat UAV" in narrative:
         return "Short Range Attack"
+    elif "long-range combat UAV" in narrative:
+        return "Long Range Attack"
     elif "MLRS" in narrative:
         if "mortar" in narrative or "artillery" in narrative:
             return "Artillery/Other"
@@ -118,12 +123,18 @@ def process_incident(
         hromada = inc["Hromada"].replace(" громада", "")
     settl = transliterate(inc["Settlement"])
     settl = SETTL_EXC.get(settl, settl)
+    lat, lon = "", ""
+    if settl == "Lohy":
+        lat = "52.247545"
+        lon = "32.568285"
+        settl = "N/A settlement"
     incident = {
         "Date": inc["Date"], "Time": inc.get("Time", None),
         "Oblast": oblast, "Raion": raion, "Hromada": hromada,
         "Settlement": settl, "Narrative": text,
         "Location type": "International Border", "Actor 1": actor1,
         "Actor 2": "Ukrainian Army", "Act": act, "WARNINGS": "",
+        "Latitude": lat, "Longitude": lon,
     }
     print("Processed")
     return incident
