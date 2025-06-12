@@ -6,9 +6,10 @@ import pandas as pd
 import funcs as fn
 from config import profile_path, profile_name, target_url
 from datetime import datetime
+from time import sleep
 
 
-def write_incident(driver: fn.Chrome, row) -> str:
+def write_incident(driver: fn.Edge, row) -> str:
     """This function step by step calls all functions to add incident
     and returns incident id (str)"""
     fn.start_input(driver)
