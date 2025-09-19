@@ -1,7 +1,10 @@
 chdcvenv/
+chromedriver-win64/
+chrome-test/
 __pycache__/
 *.pyc
 *.xlsx
+driverlogs.txt
 logs.txt
 config.py
 db_script.py

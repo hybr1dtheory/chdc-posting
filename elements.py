@@ -47,6 +47,7 @@ modal_window_selector = 'mat-dialog-container[aria-modal="true"]'
 modal_close_btn_selector = 'chdc-info-dialog > div > header > button.mat-icon-button'
 radio_group_selector = 'div.editable.valid > div.radio-options > mat-radio-group'
 incident_id_selector = 'header > div.sidebar__title > span.status-badge.status-badge--incomplete'
+account_selector = 'div.table > div > div.table-cell.tile-img'
 
 pi_actors_path = {
     "Other General Public": ["General Public"],
@@ -63,7 +64,7 @@ perpetrators_path = {
 			"Foreign Government Forces",
 			"Single Foreign Government Forces",
 			"Russia",
-            "Russian Airforce"
+            "Russian Air Force"
 	],
 }
 
@@ -103,5 +104,8 @@ acts_path = {
     ],
     "Fighting Vehicle": [
         "Attack", "Platforms", "Fighting Vehicle"
+    ],
+    "CO4": [
+        "Attack", "Combination", "CO4: All other combinations"
     ],
 }

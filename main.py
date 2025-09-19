@@ -1,15 +1,15 @@
 """This module is designed to automate data entry into a web form
 with fields of several types (text, datetime, drop-down list)"""
-from selenium.webdriver.edge.options import Options
+from selenium.webdriver.chrome.options import Options
 import logging
 import pandas as pd
 import funcs as fn
-from config import profile_path, profile_name, target_url
+from config import profile_path, profile_name, target_url, chrome_bin, chromedriver_bin
 from datetime import datetime
 from time import sleep
 
 
-def write_incident(driver: fn.Edge, row) -> str:
+def write_incident(driver: fn.Chrome, row) -> str:
     """This function step by step calls all functions to add incident
     and returns incident id (str)"""
     fn.start_input(driver)
@@ -51,14 +51,11 @@ browser_options.add_argument(fr'user-data-dir={profile_path}')
 browser_options.add_argument(fr"--profile-directory={profile_name}")
 browser_options.add_argument("--disable-blink-features=AutomationControlled")
 browser_options.add_argument("--start-maximized")  # open driver in maximized window
-browser_options.add_argument("--kiosk")  # fullscreen mode for the webpage
-browser_options.add_argument("zoom=0.5")  # set zoom to 50%
-driver = fn.Edge(options=browser_options)
-driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-    'source': '''delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;'''
-})
+browser_options.add_argument("--start-fullscreen")  # fullscreen mode for the webpage
+browser_options.add_argument("--kiosk")
+browser_options.binary_location = chrome_bin
+service = fn.ChromeService(executable_path=chromedriver_bin, log_output='driverlogs.txt')
+driver = fn.Chrome(service=service, options=browser_options)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='logs.txt', encoding='utf-8', level=logging.INFO)

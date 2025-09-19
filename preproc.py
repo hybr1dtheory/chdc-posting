@@ -40,6 +40,8 @@ SETTL_EXC = {
     "Yurieve": "Yuriieve",
     "Muraveinia": "Muraveynia",
     "Shyrokyi Bereh": "Shyrokyy Bereh",
+    "Novhorod-Siverskyi": "Novhorod-Siverskyy",
+    "Kremskyi Buhor": "Kremskyy Buhor",
 }
 
 
@@ -78,6 +80,8 @@ def parse_act(narrative: str) -> str:
     elif "loitering munition" in narrative:
         return "Long Range Attack"
     elif "short-range combat UAV" in narrative:
+        if "artillery" in narrative:
+            return "CO4"
         return "Short Range Attack"
     elif "long-range combat UAV" in narrative:
         return "Long Range Attack"
@@ -87,7 +91,7 @@ def parse_act(narrative: str) -> str:
         return "Rockets & Missiles"
     elif "grenade launcher" in narrative:
         return "Light Weapons"
-    elif "round" in narrative:
+    elif "round" in narrative or "artillery" in narrative:
         return "Artillery"
     elif "tank cannon" in narrative:
         return "Fighting Vehicle"
@@ -119,6 +123,8 @@ def process_incident(
         raion = inc["Raion"].replace(" район", "")
     if hrom_tr:
         hromada = hrom_tr.get(inc["Hromada"].replace(" громада", ""), "")
+        if pd.isna(hromada) or hromada == "nan":
+            hromada = transliterate(inc["Hromada"].replace(" громада", ""))
     else:
         hromada = inc["Hromada"].replace(" громада", "")
     settl = transliterate(inc["Settlement"])
